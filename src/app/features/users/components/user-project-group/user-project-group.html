@@ -1,0 +1,10 @@
+<section class="space-y-2">
+  <div class="flex items-center justify-between">
+    <h4 class="text-sm font-semibold text-slate-700">{{ projectName() }}</h4>
+    <span class="rounded-full bg-indigo-100 px-2 py-0.5 text-xs font-semibold text-indigo-700">
+      {{ tasks().length }} {{ tasks().length > 1 ? 'tâches' : 'tâche' }}
+    </span>
+  </div>
+
+  <app-task-list [tasks]="tasks()" [showAssignee]="false" />
+</section>

@@ -1,0 +1,22 @@
+<section class="mx-auto max-w-6xl p-6">
+  <input
+    type="text"
+    placeholder="Rechercher un projet..."
+    class="mb-6 w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 shadow-sm
+           transition focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+    [(ngModel)]="searchTerm" />
+
+  @if (filteredProjects().length === 0) {
+    <app-empty-state message="Aucun projet trouvé." />
+  } @else {
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      @for (project of filteredProjects(); track project.id; let i = $index) {
+        <app-project-card
+          class="animate-fade-in-up"
+          [style.animation-delay.ms]="i * 120"
+          [project]="project"
+          (projectSelected)="onProjectSelected($event)" />
+      }
+    </div>
+  }
+</section>

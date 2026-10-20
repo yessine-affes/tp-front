@@ -1,0 +1,38 @@
+<div class="p-6">
+
+  <h1 class="text-2xl font-bold mb-6">
+    Liste des utilisateurs
+  </h1>
+
+  <!-- Recherche -->
+  <input
+    type="text"
+    [(ngModel)]="searchTerm"
+    placeholder="Rechercher un utilisateur..."
+    class="w-full p-3 mb-6 border rounded-lg"
+  />
+
+  @if (filteredUsers.length > 0) {
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      @for (user of filteredUsers; track user.id) {
+
+        <app-user-card
+          [user]="user"
+          [projects]="projects">
+        </app-user-card>
+
+      }
+
+    </div>
+
+  } @else {
+
+    <p class="text-gray-500 text-center py-10">
+      Aucun utilisateur ne correspond à la recherche.
+    </p>
+
+  }
+
+</div>

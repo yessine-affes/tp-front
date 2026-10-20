@@ -1,0 +1,52 @@
+<article
+  class="flex h-full flex-col gap-4 rounded-xl bg-white p-5 shadow-md
+         transition duration-300 ease-out hover:-translate-y-1.5 hover:shadow-xl">
+
+  <div class="flex items-start gap-3">
+    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full
+                bg-linear-to-br from-indigo-500 to-sky-400 font-bold text-white">
+      {{ user().name | initials }}
+    </div>
+
+    <div class="min-w-0 flex-1">
+      <h2 class="truncate text-lg font-bold text-slate-800">{{ user().name | titlecase }}</h2>
+      <p class="truncate text-sm text-slate-500">{{ user().email | lowercase }}</p>
+      <p class="text-xs font-medium text-indigo-600">{{ user().role }}</p>
+    </div>
+
+    @if (user().active) {
+     <span
+  class="rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ring-inset"
+  [ngClass]="{
+    'bg-emerald-100 text-emerald-700 ring-emerald-200': user().active,
+    'bg-slate-100 text-slate-500 ring-slate-200': !user().active
+  }">
+  {{ user().active ? 'Actif' : 'Inactif' }}
+</span>
+  </div>
+
+  <div class="grid grid-cols-3 gap-2 text-center">
+    <div class="rounded-lg bg-amber-50 p-2">
+      <p class="text-xl font-bold text-amber-600">{{ todoCount() }}</p>
+      <p class="text-xs text-amber-700">À faire</p>
+    </div>
+    <div class="rounded-lg bg-indigo-50 p-2">
+      <p class="text-xl font-bold text-indigo-600">{{ inProgressCount() }}</p>
+      <p class="text-xs text-indigo-700">En cours</p>
+    </div>
+    <div class="rounded-lg bg-emerald-50 p-2">
+      <p class="text-xl font-bold text-emerald-600">{{ doneCount() }}</p>
+      <p class="text-xs text-emerald-700">Terminées</p>
+    </div>
+  </div>
+
+  <div class="space-y-4">
+    @for (group of groups(); track group.project.id) {
+      <app-user-project-group
+        [projectName]="group.project.name"
+        [tasks]="group.tasks" />
+    } @empty {
+      <app-empty-state message="Aucune tâche assignée" />
+    }
+  </div>
+</article>

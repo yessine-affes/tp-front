@@ -1,0 +1,18 @@
+<div class="min-h-screen bg-linear-to-br from-indigo-50 via-white to-sky-50">
+  <header class="bg-linear-to-r from-indigo-600 to-sky-500 py-10 text-white shadow-lg">
+    <div class="mx-auto flex max-w-6xl flex-wrap items-end justify-between gap-4 px-6">
+      <div>
+        <h1 class="text-4xl font-extrabold tracking-tight">TaskFlow</h1>
+        <p class="mt-1 text-indigo-100">Gérez vos projets et vos tâches en un coup d'œil</p>
+      </div>
+
+      <app-view-toggle [(view)]="view" />
+    </div>
+  </header>
+
+  @if (view() === 'task') {
+    <app-project-list />
+  } @else {
+    <app-user-list />
+  }
+</div>

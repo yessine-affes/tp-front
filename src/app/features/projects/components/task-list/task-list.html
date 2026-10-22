@@ -6,10 +6,14 @@
   <ul class="space-y-2">
     @for (task of tasks(); track task.id) {
       <li
+  appHighlight
+  appOverdue
+  #overdue="appOverdue"
+  [dueDate]="task.dueDate"
+  [done]="task.status === 'Terminé'"
   class="flex items-center justify-between gap-2 rounded-md border-l-4 p-2.5
          transition duration-200 hover:translate-x-1 hover:shadow-sm"
-  [ngClass]="statusClass(task.status)">
-
+  [ngClass]="overdue.isOverdue ? '' : statusClass(task.status)">
         <div class="min-w-0">
           <p class="truncate text-sm font-medium text-slate-700"
              [class.line-through]="task.status === 'Terminé'"
@@ -17,7 +21,9 @@
             {{ task.title }}
           </p>
 
-          <p class="text-xs text-slate-500">{{ task.status }}</p>
+         <p class="text-xs text-slate-500">
+          {{ task.status | taskStatusLabel }}
+        </p>
 
           @if (task.dueDate; as due) {
             <p class="text-xs text-slate-500">
@@ -28,8 +34,12 @@
           }
 
           @if (task.description; as description) {
-            <p class="text-xs text-slate-400">{{ description | truncate: 40 }}</p>
-          }
+  <p
+    class="text-xs text-slate-400"
+    [appTooltip]="description">
+    {{ description | truncate: 40 }}
+  </p>
+}
 
           @if (showAssignee()) {
             <p class="text-xs text-slate-400">Assigné à : {{ assigneeName(task.assigneeId) }}</p>

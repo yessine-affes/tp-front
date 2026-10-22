@@ -1,57 +1,33 @@
-import { DatePipe, NgClass } from '@angular/common';
 import { Component, OnInit, inject, input, signal } from '@angular/core';
-import { UserService } from '../../../../core/services/user.service';
-import { DeadlinePipe } from '../../../../shared/pipes/deadline.pipe';
-import { TruncatePipe } from '../../../../shared/pipes/truncate.pipe';
-import { User } from '../../../users/models/user.model';
-import { Priority, Status, Task } from '../../models/task.model';
-import { HighlightDirective } from '../../../../shared/directives/highlight.directive';
-import { OverdueDirective } from '../../../../shared/directives/overdue.directive';
-import { TooltipDirective } from '../../../../shared/directives/tooltip.directive';
-import { TaskStatusLabelPipe } from '../../../../shared/pipes/task-status-label.pipe';
 
+import { UserService } from '../../../../core/services/user.service';
+import { User } from '../../../users/models/user.model';
+import { Task } from '../../models/task.model';
+import { TaskItem } from '../task-item/task-item';
 
 @Component({
   selector: 'app-task-list',
-  imports: [DatePipe,NgClass, TruncatePipe, DeadlinePipe,HighlightDirective,OverdueDirective, TooltipDirective,TaskStatusLabelPipe],
+  imports: [TaskItem],
   templateUrl: './task-list.html',
 })
 export class TaskList implements OnInit {
   private userService = inject(UserService);
+  private users = signal<User[]>([]);
 
   tasks = input.required<Task[]>();
   showAssignee = input(true);
 
-  private users = signal<User[]>([]);
-
   ngOnInit(): void {
-    this.userService.getUsers().subscribe((users) => this.users.set(users));
+    this.userService.getUsers().subscribe((users) => {
+      this.users.set(users);
+    });
   }
 
   assigneeName(id?: number): string {
-    if (id === undefined) return 'Non assignée';
-    return this.users().find((u) => u.id === id)?.name ?? 'Inconnu';
-  }
-
-  statusClass(status: Status): string {
-    switch (status) {
-      case 'Terminé':
-        return 'border-emerald-500 bg-emerald-50';
-      case 'En cours':
-        return 'border-indigo-500 bg-indigo-50';
-      default:
-        return 'border-amber-500 bg-amber-50';
+    if (id === undefined) {
+      return 'Non assignée';
     }
-  }
 
-  priorityClass(priority: Priority): string {
-    switch (priority) {
-      case 'Haute':
-        return 'bg-rose-100 text-rose-700';
-      case 'Moyenne':
-        return 'bg-orange-100 text-orange-700';
-      default:
-        return 'bg-slate-100 text-slate-600';
-    }
+    return this.users().find((user) => user.id === id)?.name ?? 'Inconnu';
   }
 }

@@ -73,7 +73,9 @@ appHighlight="#e0f2fe"
     <p class="text-sm font-semibold text-amber-600">Pas encore démarré</p>
   }
 
-  <app-task-list [tasks]="project().tasks | slice: 0 : 3" />
+  <app-task-list
+  [tasks]="project().tasks | slice: 0 : 3"
+  [showAssignee]="true" />
 
   <button
     type="button"

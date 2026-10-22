@@ -1,60 +1,16 @@
-@if (tasks().length === 0) {
-  <p class="rounded-lg border border-dashed border-slate-300 p-3 text-center text-sm italic text-slate-400">
-    Aucune tâche.
-  </p>
-} @else {
-  <ul class="space-y-2">
-    @for (task of tasks(); track task.id) {
-      <li
-  appHighlight
-  appOverdue
-  #overdue="appOverdue"
-  [dueDate]="task.dueDate"
-  [done]="task.status === 'Terminé'"
-  class="flex items-center justify-between gap-2 rounded-md border-l-4 p-2.5
-         transition duration-200 hover:translate-x-1 hover:shadow-sm"
-  [ngClass]="overdue.isOverdue ? '' : statusClass(task.status)">
-        <div class="min-w-0">
-          <p class="truncate text-sm font-medium text-slate-700"
-             [class.line-through]="task.status === 'Terminé'"
-             [class.text-slate-400]="task.status === 'Terminé'">
-            {{ task.title }}
-          </p>
-
-         <p class="text-xs text-slate-500">
-          {{ task.status | taskStatusLabel }}
-        </p>
-
-          @if (task.dueDate; as due) {
-            <p class="text-xs text-slate-500">
-              Échéance : {{ due | date: 'dd/MM/yyyy' }} · {{ due | deadline }}
-            </p>
-          } @else {
-            <p class="text-xs italic text-slate-400">Aucune échéance</p>
-          }
-
-          @if (task.description; as description) {
-  <p
-    class="text-xs text-slate-400"
-    [appTooltip]="description">
-    {{ description | truncate: 40 }}
-  </p>
-}
-
-          @if (showAssignee()) {
-            <p class="text-xs text-slate-400">Assigné à : {{ assigneeName(task.assigneeId) }}</p>
-          }
-        </div>
-
-        <span class="shrink-0 rounded px-2 py-0.5 text-xs font-semibold"
-              [class]="priorityClass(task.priority)">
-          @switch (task.priority) {
-            @case ('Haute') { ▲ Haute }
-            @case ('Moyenne') { ● Moyenne }
-            @default { ▼ Basse }
-          }
-        </span>
-      </li>
-    }
-  </ul>
-}
+<ul class="space-y-2">
+  @for (task of tasks(); track task.id) {
+    <li>
+      <app-task-item
+        [task]="task"
+        [showAssignee]="showAssignee()"
+        [assigneeName]="assigneeName(task.assigneeId)" />
+    </li>
+  } @empty {
+    <li
+      class="rounded-lg border border-dashed border-slate-300
+             p-3 text-center text-sm italic text-slate-400">
+      Aucune tâche
+    </li>
+  }
+</ul>
